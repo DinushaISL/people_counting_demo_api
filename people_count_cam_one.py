@@ -7,7 +7,7 @@ import dlib
 import cv2
 import time
 import configparser
-
+import argparse
 # Load the configuration file
 config = configparser.RawConfigParser()
 config.read('conf.ini')
@@ -31,10 +31,12 @@ net = cv2.dnn.readNetFromCaffe('mobilenet_ssd/MobileNetSSD_deploy.prototxt',
 
 
 # vs = cv2.VideoCapture("example_01.mp4")
-# vs = cv2.VideoCapture(0)
+vs = cv2.VideoCapture(0)
+# parser = argparse.ArgumentParser()
+# parser.add_argument('--x', type=float, default=1.0, help='x is integer')
+# args = parser.parse_args()
 
-
-
+# cond = config.get('CountCam1', 'cond')
 # initialize the video writer (we'll instantiate later if need be)
 writer = None
 
@@ -63,11 +65,18 @@ count2 = 0
 # loop over frames from the video stream
 while True:
 
-    vs = cv2.VideoCapture('http://'+str(username)+':'+str(password)+'@'+str(url)+':'+str(port)+'/tmpfs/auto.jpg')
+    # vs = cv2.VideoCapture('http://'+str(username)+':'+str(password)+'@'+str(url)+':'+str(port)+'/tmpfs/auto.jpg')
 
     ret, frame = vs.read()
 
     if not ret:
+        break
+
+    config.read('conf.ini')
+    cond = config.get('CountCam1', 'cond')
+    print(cond)
+
+    if int(cond) == 1:
         break
 
     # resize the images
