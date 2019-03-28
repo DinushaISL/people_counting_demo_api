@@ -7,15 +7,15 @@ import dlib
 import cv2
 import time
 import configparser
-import argparse
+
 # Load the configuration file
 config = configparser.RawConfigParser()
 config.read('conf.ini')
 
-url = config.get('CountCam1', 'url')
-port = config.get('CountCam1', 'port')
-username = config.get('CountCam1', 'username')
-password = config.get('CountCam1', 'password')
+url = config.get('CountCam2', 'url')
+port = config.get('CountCam2', 'port')
+username = config.get('CountCam2', 'username')
+password = config.get('CountCam2', 'password')
 
 # initialize the list of class labels MobileNet SSD was trained to
 # detect
@@ -32,11 +32,8 @@ net = cv2.dnn.readNetFromCaffe('mobilenet_ssd/MobileNetSSD_deploy.prototxt',
 
 # vs = cv2.VideoCapture("example_01.mp4")
 # vs = cv2.VideoCapture(0)
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--x', type=float, default=1.0, help='x is integer')
-# args = parser.parse_args()
 
-# cond = config.get('CountCam1', 'cond')
+
 # initialize the video writer (we'll instantiate later if need be)
 writer = None
 
@@ -60,8 +57,7 @@ totalUp = 0
 
 # start the frames per second throughput estimator
 fps = FPS().start()
-count1 = 0
-count2 = 0
+
 # loop over frames from the video stream
 while True:
 
@@ -73,12 +69,10 @@ while True:
         break
 
     config.read('conf.ini')
-    cond = config.get('CountCam1', 'cond')
-    print(cond)
+    cond = config.set('CountCam2', 'cond')
 
     if int(cond) == 1:
         break
-
     # resize the images
     frame = imutils.resize(frame, width=900)
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -216,14 +210,7 @@ while True:
         ("Status", status),
     ]
 
-    # print(info)
-    if count1 != totalUp:
-        print(info)
-        count1 = totalUp
-
-    if count2 != totalDown:
-        print(info)
-        count2 = totalDown
+    print(info)
 
     # show the output frame
     cv2.imshow("Frame", frame)

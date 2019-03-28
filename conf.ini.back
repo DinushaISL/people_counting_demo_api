@@ -1,0 +1,31 @@
+[CountCam1]
+url = 192.168.1.254
+port = 8072
+username = admin
+password = admin
+pid = 6260
+cond = 0
+
+[CountCam2]
+url = 
+port = 7788
+username = admin
+password = admin
+pid = 14587
+cond = 0
+
+[CountCam3]
+url = 
+port = 8866
+username = admin
+password = admin
+pid = 14587
+cond = 0
+
+[CountCam4]
+url = 
+port = 5897
+username = admin
+password = admin
+pid = 14587
+
