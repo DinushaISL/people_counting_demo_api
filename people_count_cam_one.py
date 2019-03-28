@@ -12,6 +12,11 @@ import configparser
 config = configparser.RawConfigParser()
 config.read('conf.ini')
 
+url = config.get('CountCam1', 'url')
+port = config.get('CountCam1', 'port')
+username = config.get('CountCam1', 'username')
+password = config.get('CountCam1', 'password')
+
 # initialize the list of class labels MobileNet SSD was trained to
 # detect
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -25,7 +30,10 @@ net = cv2.dnn.readNetFromCaffe('mobilenet_ssd/MobileNetSSD_deploy.prototxt',
                                'mobilenet_ssd/MobileNetSSD_deploy.caffemodel')
 
 
-vs = cv2.VideoCapture("example_01.mp4")
+# vs = cv2.VideoCapture("example_01.mp4")
+# vs = cv2.VideoCapture(0)
+
+
 
 # initialize the video writer (we'll instantiate later if need be)
 writer = None
@@ -38,7 +46,7 @@ H = None
 # instantiate our centroid tracker, then initialize a list to store
 # each of our dlib correlation trackers, followed by a dictionary to
 # map each unique object ID to a TrackableObject
-ct = CentroidTracker(maxDisappeared=40, maxDistance=30)
+ct = CentroidTracker(maxDisappeared=100, maxDistance=50)
 trackers = []
 trackableObjects = {}
 
@@ -50,9 +58,12 @@ totalUp = 0
 
 # start the frames per second throughput estimator
 fps = FPS().start()
-
+count1 = 0
+count2 = 0
 # loop over frames from the video stream
-while vs.isOpened():
+while True:
+
+    vs = cv2.VideoCapture('http://'+str(username)+':'+str(password)+'@'+str(url)+':'+str(port)+'/tmpfs/auto.jpg')
 
     ret, frame = vs.read()
 
@@ -196,7 +207,14 @@ while vs.isOpened():
         ("Status", status),
     ]
 
-    print(info)
+    # print(info)
+    if count1 != totalUp:
+        print(info)
+        count1 = totalUp
+
+    if count2 != totalDown:
+        print(info)
+        count2 = totalDown
 
     # show the output frame
     cv2.imshow("Frame", frame)
