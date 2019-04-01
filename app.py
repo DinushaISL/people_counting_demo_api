@@ -477,4 +477,6 @@ def process_count_cam3():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="192.168.1.102", port=7788)
+    app.run(debug=True, host="192.168.1.103", port=7788)
+    # app.run(debug=True, host="localhost", port=7788)
+

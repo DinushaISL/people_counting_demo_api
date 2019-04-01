@@ -7,6 +7,8 @@ import dlib
 import cv2
 import time
 import configparser
+import requests
+import json
 
 # Load the configuration file
 config = configparser.RawConfigParser()
@@ -57,6 +59,9 @@ totalUp = 0
 
 # start the frames per second throughput estimator
 fps = FPS().start()
+
+count1 = 0
+count2 = 0
 
 # loop over frames from the video stream
 while True:
@@ -212,7 +217,29 @@ while True:
         ("Status", status),
     ]
 
-    print(info)
+    # print(info)
+
+    if count1 != totalUp:
+        data = {"in": totalUp,
+                "out": totalDown,
+                "cam": "Cam3"}
+        try:
+            requests.post(url='http://192.168.1.102:7788/test', json=data)
+
+        except requests.exceptions.RequestException as e:
+            print(e)
+        count1 = totalUp
+
+    if count2 != totalDown:
+        data = {"in": totalUp,
+                "out": totalDown,
+                "cam": "Cam3"}
+        try:
+            requests.post(url='http://192.168.1.102:7788/test', json=data)
+
+        except requests.exceptions.RequestException as e:
+            print(e)
+        count2 = totalDown
 
     # show the output frame
     cv2.imshow("Frame", frame)

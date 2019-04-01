@@ -229,7 +229,11 @@ while True:
         data = {"in": totalUp,
                 "out": totalDown,
                 "cam": "Cam1"}
-        requests.post(url='http://192.168.1.102:7788/test', json=data)
+        try:
+            requests.post(url='http://192.168.1.103:7788/test', json=data)
+
+        except requests.exceptions.RequestException as e:
+            print(e)
         count1 = totalUp
 
     if count2 != totalDown:
@@ -237,7 +241,11 @@ while True:
         data = {"in": totalUp,
                 "out": totalDown,
                 "cam": "Cam1"}
-        requests.post(url='http://192.168.1.102:7788/test', json=data)
+        try:
+            requests.post(url='http://192.168.1.103:7788/test', json=data)
+
+        except requests.exceptions.RequestException as e:
+            print(e)
         count2 = totalDown
 
     # show the output frame
