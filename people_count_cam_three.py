@@ -71,6 +71,7 @@ while True:
     if not ret:
         break
 
+    # break while loop when end process api request initiate
     if int(cond) == 1:
         break
 

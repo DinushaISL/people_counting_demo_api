@@ -71,6 +71,7 @@ while True:
     config.read('conf.ini')
     cond = config.set('CountCam2', 'cond')
 
+    # break while when end process api request initiate
     if int(cond) == 1:
         break
     # resize the images

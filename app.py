@@ -118,10 +118,11 @@ def start_process_count_cam1():
         # process = subprocess.Popen(['C:/Python27/python.exe',
         #                             'people_count_cam_one.py'], shell=True, stdout=subprocess.PIPE)
         config.set('CountCam1', 'cond', 0)
-        process = subprocess.Popen(['python3 people_count_cam_one.py '], shell=True, stdout=subprocess.PIPE)
+        process = subprocess.Popen(['python3 people_count_cam_one.py'], shell=True, stdout=subprocess.PIPE)
         config.set('CountCam1', 'pid', str(process.pid))
         if config.has_option('CountCam1', 'pid'):
             subprocess.Popen(['cp conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
+            # subprocess.Popen(['copy conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
 
         with open('conf.ini', 'w') as configfile:
                 config.write(configfile)
@@ -233,6 +234,7 @@ def start_process_count_cam2():
         #     file.close()
         if config.has_option('CountCam2', 'pid'):
             subprocess.Popen(['cp conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
+            # subprocess.Popen(['copy conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
             config.set('CountCam2', 'pid', str(process.pid))
             with open('conf.ini', 'w') as configfile:
                 config.write(configfile)
@@ -356,6 +358,7 @@ def start_process_count_cam3():
         #     file.close()
         if config.has_option('CountCam3', 'pid'):
             subprocess.Popen(['cp conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
+            # subprocess.Popen(['copy conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
             config.set('CountCam3', 'pid', str(process.pid))
             with open('conf.ini', 'w') as configfile:
                 config.write(configfile)
