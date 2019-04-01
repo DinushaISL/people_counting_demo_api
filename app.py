@@ -15,6 +15,14 @@ def start():
     return "started"
 
 
+@app.route('/test', methods=['POST'])
+def test_api_request():
+    in_count = request.json['in']
+    out_count = request.json['out']
+    print(in_count, out_count)
+    return jsonify({'status': 'success'})
+
+
 @app.route('/cam1Config', methods=['POST'])
 def cam1_config():
     """
@@ -469,4 +477,4 @@ def process_count_cam3():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="localhost", port=7788)
+    app.run(debug=True, host="192.168.1.102", port=7788)
