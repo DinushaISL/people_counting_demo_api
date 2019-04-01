@@ -7,6 +7,8 @@ import dlib
 import cv2
 import time
 import configparser
+import requests
+import json
 import argparse
 # Load the configuration file
 config = configparser.RawConfigParser()
@@ -62,6 +64,11 @@ totalUp = 0
 fps = FPS().start()
 count1 = 0
 count2 = 0
+
+# create json
+# data = {"in": totalUp,
+#         "out": totalDown,
+#         "cam": "Cam1"}
 # loop over frames from the video stream
 while True:
 
@@ -74,7 +81,7 @@ while True:
 
     config.read('conf.ini')
     cond = config.get('CountCam1', 'cond')
-    print(cond)
+    # print(cond)
 
     if int(cond) == 1:
         break
@@ -219,10 +226,18 @@ while True:
     # print(info)
     if count1 != totalUp:
         print(info)
+        data = {"in": totalUp,
+                "out": totalDown,
+                "cam": "Cam1"}
+        requests.post(url='http://192.168.1.102:7788/test', json=data)
         count1 = totalUp
 
     if count2 != totalDown:
         print(info)
+        data = {"in": totalUp,
+                "out": totalDown,
+                "cam": "Cam1"}
+        requests.post(url='http://192.168.1.102:7788/test', json=data)
         count2 = totalDown
 
     # show the output frame
