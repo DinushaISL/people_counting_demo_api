@@ -58,7 +58,7 @@ totalDown = 0
 totalUp = 0
 
 # start the frames per second throughput estimator
-fps = FPS().start()
+# fps = FPS().start()
 
 count1 = 0
 count2 = 0
@@ -226,7 +226,8 @@ while True:
         try:
             requests.post(url='http://192.168.1.102:7788/test', json=data)
 
-        except requests.exceptions.RequestException as e:
+        except (requests.exceptions.RequestException, requests.exceptions.ConnectionError,
+                requests.exceptions.URLRequired) as e:
             print(e)
         count1 = totalUp
 
@@ -237,7 +238,8 @@ while True:
         try:
             requests.post(url='http://192.168.1.102:7788/test', json=data)
 
-        except requests.exceptions.RequestException as e:
+        except (requests.exceptions.RequestException, requests.exceptions.ConnectionError,
+                requests.exceptions.URLRequired) as e:
             print(e)
         count2 = totalDown
 
@@ -253,12 +255,12 @@ while True:
     # increment the total number of frames processed thus far and
     # then update the FPS counter
     totalFrames += 1
-    fps.update()
+    # fps.update()
 
 # stop the timer and display FPS information
-fps.stop()
-print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
-print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+# fps.stop()
+# print("[INFO] elapsed time: {:.2f}".format(fps.elapsed()))
+# print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
 vs.release()
 # close any open windows
