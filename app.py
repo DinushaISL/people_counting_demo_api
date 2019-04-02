@@ -15,12 +15,25 @@ def start():
     return "started"
 
 
+@app.route('/post/<string:post_id>')
+def show_post(post_id):
+    # show the post with the given id, the id is an integer
+    return 'Post' + ' ' + post_id
+
+
 @app.route('/test', methods=['POST'])
 def test_api_request():
-    in_count = request.json['in']
-    out_count = request.json['out']
-    print(in_count, out_count)
-    return jsonify({'status': 'success'})
+    try:
+        in_count = request.json['in']
+        out_count = request.json['out']
+        print(in_count, out_count)
+
+    except TypeError as ex:
+        print("type error because of {}".format(ex))
+        return jsonify({'status': 'fail'})
+    # print(in_count, out_count)
+    else:
+        return jsonify({'status': 'success'})
 
 
 @app.route('/cam1Config', methods=['POST'])
@@ -30,12 +43,13 @@ def cam1_config():
     :param: url, port, username, password
     :return: json(status, message)
     """
-    url = request.json['url']
-    port = request.json['port']
-    username = request.json['username']
-    password = request.json['password']
 
     try:
+        url = request.json['url']
+        port = request.json['port']
+        username = request.json['username']
+        password = request.json['password']
+
         config.set('CountCam1', 'url', str(url))
         config.set('CountCam1', 'port', str(port))
         config.set('CountCam1', 'username', str(username))
@@ -44,10 +58,10 @@ def cam1_config():
         with open('conf.ini', 'w') as configfile:
             config.write(configfile)
 
-    except (FileNotFoundError, configparser.NoSectionError, configparser.NoOptionError,
+    except (FileNotFoundError, TypeError, configparser.NoSectionError, configparser.NoOptionError,
             configparser.DuplicateOptionError, configparser.DuplicateSectionError) as er:
         return jsonify({'status': 'fail',
-                        'message': ' Fail to configure cam1'})
+                        'message': ' Fail to configure cam1 because of {}'.format(er)})
 
     else:
         return jsonify({'status': 'success',
@@ -61,12 +75,13 @@ def cam2_config():
     :param: url, port, username, password
     :return: json(status, message)
     """
-    url = request.json['url']
-    port = request.json['port']
-    username = request.json['username']
-    password = request.json['password']
 
     try:
+        url = request.json['url']
+        port = request.json['port']
+        username = request.json['username']
+        password = request.json['password']
+
         config.set('CountCam2', 'url', str(url))
         config.set('CountCam2', 'port', str(port))
         config.set('CountCam2', 'username', str(username))
@@ -75,10 +90,11 @@ def cam2_config():
         with open('conf.ini', 'w') as configfile:
             config.write(configfile)
 
-    except (FileNotFoundError, configparser.NoSectionError, configparser.NoOptionError,
+    except (FileNotFoundError, TypeError, configparser.NoSectionError, configparser.NoOptionError,
             configparser.DuplicateOptionError, configparser.DuplicateSectionError) as er:
-        print(er)
-        return jsonify({'status': 'fail'})
+        # print(er)
+        return jsonify({'status': 'fail',
+                        'message': ' Fail to configure cam1 because of {}'.format(er)})
 
     else:
         return jsonify({'status': 'success'})
@@ -91,12 +107,13 @@ def cam3_config():
     :param:url, port , username, password
     :return: json(status, message)
     """
-    url = request.json['url']
-    port = request.json['port']
-    username = request.json['username']
-    password = request.json['password']
 
     try:
+        url = request.json['url']
+        port = request.json['port']
+        username = request.json['username']
+        password = request.json['password']
+
         config.set('CountCam3', 'url', str(url))
         config.set('CountCam3', 'port', str(port))
         config.set('CountCam3', 'username', str(username))
@@ -105,10 +122,11 @@ def cam3_config():
         with open('conf.ini', 'w') as configfile:
             config.write(configfile)
 
-    except (FileNotFoundError, configparser.NoOptionError, configparser.NoSectionError,
+    except (FileNotFoundError, TypeError, configparser.NoOptionError, configparser.NoSectionError,
             configparser.DuplicateOptionError, configparser.DuplicateSectionError) as er:
-        print(er)
-        return jsonify({'status': 'fail'})
+        # print(er)
+        return jsonify({'status': 'fail',
+                        'message': ' Fail to configure cam1 because of {}'.format(er)})
 
     else:
         return jsonify({'status': 'success'})
@@ -136,9 +154,9 @@ def start_process_count_cam1():
                 config.write(configfile)
 
     except (FileNotFoundError, configparser.NoOptionError, configparser.NoSectionError) as er:
-        print(er)
+        # print(er)
         return jsonify({"status": "fail",
-                        'message': 'Fail to start people counting for cam1'})
+                        'message': 'Fail to start people counting for cam1 because of {}'.format(er)})
 
     else:
         return jsonify({"status": "success",
@@ -158,7 +176,7 @@ def process_count_cam1():
 
     except (os.error, configparser.NoSectionError, configparser.NoOptionError) as er:
         return jsonify({"status": "fail",
-                        "message": "These is no started process going on. So please start the process first"})
+                        "message": "Something wrong in config file because of{}".format(er)})
 
     else:
         return jsonify({"status": "success",
@@ -251,7 +269,7 @@ def start_process_count_cam2():
             configparser.NoOptionError, configparser.NoSectionError) as er:
         # print(er)
         return jsonify({"status": "fail",
-                        'message': 'Fail to start people counting for cam2'})
+                        'message': 'Fail to start people counting for cam2 because of {}'.format(er)})
 
     else:
         return jsonify({"status": "success",
@@ -376,7 +394,7 @@ def start_process_count_cam3():
 
         # print(er)
         return jsonify({"status": "fail",
-                        'message': 'Fail to start people counting for cam3'})
+                        'message': 'Fail to start people counting for cam3 because of {}'.format(er)})
 
     else:
         return jsonify({"status": "success",
@@ -477,6 +495,6 @@ def process_count_cam3():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="192.168.1.103", port=7788)
-    # app.run(debug=True, host="localhost", port=7788)
+    # app.run(debug=True, host="192.168.1.103", port=7788)
+    app.run(debug=True, host="localhost", port=7788)
 
