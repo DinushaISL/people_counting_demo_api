@@ -258,12 +258,14 @@ def start_process_count_cam2():
         # with open('process_id.log', 'w') as file:
         #     file.write(str(process.pid) + '\n')
         #     file.close()
+        config.set('CountCam2', 'cond', 0)
+        subprocess.Popen(['cp conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
         if config.has_option('CountCam2', 'pid'):
-            subprocess.Popen(['cp conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
             # subprocess.Popen(['copy conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
             config.set('CountCam2', 'pid', str(process.pid))
-            with open('conf.ini', 'w') as configfile:
-                config.write(configfile)
+
+        with open('conf.ini', 'w') as configfile:
+            config.write(configfile)
 
     except (FileNotFoundError, subprocess.CalledProcessError, subprocess.SubprocessError,
             configparser.NoOptionError, configparser.NoSectionError) as er:
@@ -287,8 +289,9 @@ def process_count_cam2():
     #     pid = pid.split('\n', 1)[0]
     # subprocess.call(['./kill_process_id.sh', pid])
     try:
-        pid = config.get('CountCam2', 'pid')
-        os.kill(int(pid), signal.SIGTERM)
+        config.set('CountCam2', 'cond', 1)
+        with open('conf.ini', 'w') as configfile:
+            config.write(configfile)
 
     except (os.error, configparser.NoSectionError, configparser.NoOptionError) as er:
         # app.logger.error("Process kill error:"+" "+str(er))
@@ -379,15 +382,13 @@ def start_process_count_cam3():
     try:
         process = subprocess.Popen(['python3 people_count_cam_three.py'], shell=True, stdout=subprocess.PIPE)
 
-        # with open('process_id.log', 'w') as file:
-        #     file.write(str(process.pid) + '\n')
-        #     file.close()
+        config.set('CountCam2', 'cond', 0)
         if config.has_option('CountCam3', 'pid'):
             subprocess.Popen(['cp conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
             # subprocess.Popen(['copy conf.ini conf.ini.back'], shell=True, stdout=subprocess.PIPE)
             config.set('CountCam3', 'pid', str(process.pid))
-            with open('conf.ini', 'w') as configfile:
-                config.write(configfile)
+        with open('conf.ini', 'w') as configfile:
+            config.write(configfile)
 
     except (FileNotFoundError, subprocess.CalledProcessError, subprocess.SubprocessError,
             configparser.NoSectionError, configparser.NoOptionError) as er:
@@ -412,8 +413,9 @@ def process_count_cam3():
     #     pid = pid.split('\n', 1)[0]
     # subprocess.call(['./kill_process_id.sh', pid])
     try:
-        pid = config.get('CountCam3', 'pid')
-        os.kill(int(pid), signal.SIGTERM)
+        config.set('CountCam3', 'cond', 1)
+        with open('conf.ini', 'w') as configfile:
+            config.write(configfile)
 
     except (os.error, configparser.NoOptionError, configparser.NoSectionError) as er:
         # app.logger.error("Process kill error:"+" "+str(er))
